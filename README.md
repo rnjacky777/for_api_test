@@ -13,4 +13,6 @@ Contain 3 python sample
 
 ## Usage
 run the command 
+```
  $ pip install -r requirment.txt
+```
