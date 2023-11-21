@@ -1,7 +1,18 @@
-# for_api_test
-run the ```pip install -r requirment.txt```
+# python_sample
+## Table of contents
+* [General Info](#general-info)
+* [Usage](#usage)
+
+## General Info
+
+Contain 3 python sample
+- ```hand_detection``` 
+- ```login_website``` 
+- ```shopee_selenium```
 
 
-Folder hand_detection
-Folder login_website
-Folder shopee
+## Usage
+run the command 
+```
+ $ pip install -r requirment.txt
+```
