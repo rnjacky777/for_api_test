@@ -5,3 +5,4 @@ numpy
 configparser
 selenium
 pyqt5
+flask

@@ -44,4 +44,4 @@ price_xpath = "//div[@class='hpDKMN']"
 price =  driver.find_elements(By.XPATH,price_xpath)
 for prices in price:
     print(price.text)
-driver.close()
+driver.quit()

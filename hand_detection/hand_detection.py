@@ -114,7 +114,7 @@ class HandDetection():
     # endregion
 
     # region main process
-    def hand_pos(self, finger_angle, output_pos):  # 判斷手勢與功能
+    def hand_pos(self, finger_angle, output_pos,hand_type):  # 判斷手勢與功能
         f1 = finger_angle[0]  # 大拇指角度
         f2 = finger_angle[1]  # 食指角度
         f3 = finger_angle[2]  # 中指角度
@@ -122,13 +122,13 @@ class HandDetection():
         f5 = finger_angle[4]  # 小拇指角度
         # 手指角度 <50:伸直 >=50:捲縮
         if f1 < 50 and f2 < 50 and f3 < 50 and f4 < 50 and f5 < 50:  # 5
-            cv2.putText(img=self.img, text="True", org=output_pos, fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=3,
+            cv2.putText(img=self.img, text=hand_type+" True", org=output_pos, fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=3,
                         color=(255, 0, 255), thickness=3, lineType=cv2.LINE_4)
         elif f1 >= 50 and f2 >= 50 and f3 >= 50 and f4 >= 50 and f5 >= 50:  # 0
-            cv2.putText(img=self.img, text="False", org=output_pos, fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=3,
+            cv2.putText(img=self.img, text=hand_type+" False", org=output_pos, fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=3,
                         color=(255, 0, 255), thickness=3, lineType=cv2.LINE_4)
         else:
-            cv2.putText(img=self.img, text="Don't care", org=output_pos, fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=3,
+            cv2.putText(img=self.img, text=hand_type+" Don't care", org=output_pos, fontFace=cv2.FONT_HERSHEY_PLAIN, fontScale=3,
                         color=(255, 0, 255), thickness=3, lineType=cv2.LINE_4)
 
     def hand_draw(self, img, hand_landmarks):  # 繪製出手部模型
@@ -166,11 +166,13 @@ class HandDetection():
             while True:
                 results = self.process_image(hands)
                 if results.multi_hand_landmarks:
-                    for hand_landmarks in results.multi_hand_landmarks:
+                    for hand_landmarks,handedness in zip(results.multi_hand_landmarks,results.multi_handedness):
+                        # 檢查左右手
+                        hand_type = handedness.classification[0].label
                         self.hand_draw(img=self.img, hand_landmarks=hand_landmarks,)
                         output_text_pos = self.get_output_pos(hand_landmarks)
                         finger_angle = self.get_finger_angle(hand_landmarks.landmark)
-                        self.hand_pos(finger_angle, output_text_pos)
+                        self.hand_pos(finger_angle=finger_angle, output_pos=output_text_pos,hand_type=hand_type)
                 cv2.imshow('My Image', self.img)
                 if cv2.waitKey(5) == ord('q'):
                     break
