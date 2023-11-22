@@ -168,9 +168,14 @@ class HandDetection():
                 if results.multi_hand_landmarks:
                     for hand_landmarks,handedness in zip(results.multi_hand_landmarks,results.multi_handedness):
                         # 檢查左右手
+                        output_text_pos = self.get_output_pos(hand_landmarks)
+
+                        # Increase efficacy pass hand doesn't exist situation
+                        if not output_text_pos:
+                            break
+
                         hand_type = handedness.classification[0].label
                         self.hand_draw(img=self.img, hand_landmarks=hand_landmarks,)
-                        output_text_pos = self.get_output_pos(hand_landmarks)
                         finger_angle = self.get_finger_angle(hand_landmarks.landmark)
                         self.hand_pos(finger_angle=finger_angle, output_pos=output_text_pos,hand_type=hand_type)
                 cv2.imshow('My Image', self.img)
